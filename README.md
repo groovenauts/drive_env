@@ -1,8 +1,19 @@
 # DriveEnv
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/drive_env`. To experiment with that code, run `bin/console` for an interactive prompt.
+Generate `.env` file from Spreadsheet in Google Drive.
 
-TODO: Delete this and the text above, and describe your gem
+```
+$ drive_env spreadsheet to_env 'https://docs.google.com/spreadsheets/d/*********/edit#gid=0'
+# name value comment
+RAILS_ENV=production # production or testing or development
+DATABASE_HOSTNAME=x.x.x.x # IP address of Database
+DATABASE_USERNAME=appuser # Username of Database
+DATABASE_PASSWORD=appuser # Password of Database
+DATABASE_NAME=foo_production # Name of Database
+SMTP_HOST=x.x.x.x
+SMTP_USERNAME=appuser
+SMTP_PASSWORD=appuser
+```
 
 ## Installation
 
@@ -22,7 +33,67 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, you need to login Google Cloud Platform and enable APIs.
+
+1. Open https://console.developers.google.com/project
+2. Create/Select project
+3. Visit APIs & auth -> APIs
+4. Grant access to `Drive API`
+5. Visit APIs & auth -> Credentials
+6. Oauth -> Create new Client ID
+7. Choose Installed application (Other)
+8. Note CLIENT ID, CLIENT_SECRET
+
+Setup client_id, client_secret, and login.
+
+```
+$ drive_env config set client_id YOUR_CLIENT_ID
+$ drive_env config set client_secret YOUR_CLIENT_SECRET
+$ drive_env auth login
+```
+
+Now you have refresh_token, you can access to Google APIs.
+
+Show Spreadsheet in Google Drive:
+
+```
+$ drive_env spreadsheet show 'https://docs.google.com/spreadsheets/d/*********/edit#gid=0'
+```
+
+You can add alias for Spreadsheet.
+
+```
+$ drive_env spreadsheet alias sheet1 'https://docs.google.com/spreadsheets/d/*********/edit#gid=0'
+$ drive_env spreadsheet show sheet1
+```
+
+### `drive_env spreadsheet to_env`
+
+`drive_env spreadsheet to_env` with following Spreadsheet
+
+![Spreadsheet](spreadsheet.png)
+
+will generate dotenv gem friendly format.
+
+```
+$ drive_env spreadsheet to_env sheet1
+# name value comment
+RAILS_ENV=production # production or testing or development
+DATABASE_HOSTNAME=x.x.x.x # IP address of Database
+DATABASE_USERNAME=appuser # Username of Database
+DATABASE_PASSWORD=appuser # Password of Database
+DATABASE_NAME=foo_production # Name of Database
+SMTP_HOST=x.x.x.x
+SMTP_USERNAME=appuser
+SMTP_PASSWORD=appuser
+```
+
+Redirect to file `.env`, and then you can use with dotenv gem.
+
+```
+$ drive_env spreadsheet to_env sheet1 > .env
+$ your-ruby-application-with-dotenv-gem
+```
 
 ## Development
 
