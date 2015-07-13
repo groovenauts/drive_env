@@ -5,9 +5,14 @@ require 'google_drive'
 module DriveEnv
   module Cli
     class Sheet < Thor
-      desc "rows SHEET_URI", ""
+      desc "show SHEET_URI", ""
       def show(uri)
-        ws = session.spreadsheet_by_url(uri).worksheets[0]
+        spreadsheet = session.spreadsheet_by_url(uri)
+        if uri =~ /#gid=(\d+)/
+          ws = spreadsheet.worksheet_by_gid($1)
+        else
+          ws = spreadsheet.worksheets[0]
+        end
         table = Text::Table.new
         ws.rows.each.with_index do |row, idx|
           if idx == 0
