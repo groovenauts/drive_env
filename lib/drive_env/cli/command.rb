@@ -11,6 +11,11 @@ module DriveEnv
 
       desc "spreadsheet SUBCOMMAND ...ARGS", ""
       subcommand "spreadsheet", ::DriveEnv::Cli::Spreadsheet
+
+      desc "version", ""
+      def version
+        puts "drive_env v#{::DriveEnv::VERSION}"
+      end
     end
   end
 end
