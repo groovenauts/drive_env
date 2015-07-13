@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   spec.name          = "drive_env"
   spec.version       = DriveEnv::VERSION
   spec.authors       = ["YAMADA Tsuyoshi"]
-  spec.email         = ["tyamada@minimum2scp.org"]
+  spec.email         = ["tsu-yamada@groovenauts.jp"]
 
   spec.summary       = %q{Generate `.env` file from Spreadsheet in Google Drive}
   spec.description   = %q{Generate `.env` file from Spreadsheet in Google Drive}
-  spec.homepage      = "https://github.com/minimum2scp/drive_env"
+  spec.homepage      = "https://github.com/groovenauts/drive_env"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
