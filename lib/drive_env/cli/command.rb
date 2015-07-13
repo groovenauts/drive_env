@@ -9,8 +9,8 @@ module DriveEnv
       desc "config SUBCOMMAND ...ARGS", ""
       subcommand "config", ::DriveEnv::Cli::Config
 
-      desc "sheet SUBCOMMAND ...ARGS", ""
-      subcommand "sheet", ::DriveEnv::Cli::Sheet
+      desc "spreadsheet SUBCOMMAND ...ARGS", ""
+      subcommand "spreadsheet", ::DriveEnv::Cli::Spreadsheet
     end
   end
 end

@@ -4,7 +4,7 @@ require 'google_drive'
 
 module DriveEnv
   module Cli
-    class Sheet < Thor
+    class Spreadsheet < Thor
       desc "show SHEET_URI", ""
       def show(uri)
         spreadsheet = session.spreadsheet_by_url(uri)
