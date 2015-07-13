@@ -20,9 +20,7 @@ module DriveEnv
       desc "list", ""
       def list
         config = DriveEnv::Config.load
-        config.each do |k,v|
-          puts "#{k}: #{v}"
-        end
+        puts YAML.dump(config)
       end
     end
   end

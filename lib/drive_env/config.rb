@@ -9,13 +9,25 @@ module DriveEnv
     attr_accessor :client_secret
     attr_accessor :access_token
 
-    include Enumerable
-
-    def each
-      instance_variables.each do |key|
-        value = instance_variable_get(key)
-        yield key.to_s.sub(/\A@/,''), value
+    def set_alias_for_spreadsheet(name, url)
+      unless @spreadsheet_aliases
+        @spreadsheet_aliases = {}
       end
+      @spreadsheet_aliases[name] = url
+    end
+
+    def unset_alias_for_spreadsheet(name)
+      unless @spreadsheet_aliases
+        @spreadsheet_aliases = {}
+      end
+      @spreadsheet_aliases.delete(name)
+    end
+
+    def lookup_spreadsheet_url_by_alias(name)
+      unless @spreadsheet_aliases
+        @spreadsheet_aliases = {}
+      end
+      @spreadsheet_aliases[name]
     end
 
     def save(file=DEFAULT_CONFIG_FILE)
