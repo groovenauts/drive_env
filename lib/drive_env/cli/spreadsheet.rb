@@ -24,18 +24,31 @@ module DriveEnv
       def to_env(url_or_alias)
         ws = worksheet(url_or_alias)
         ws.rows.each.with_index do |row, idx|
-          if row[0] =~ /\A\s*#/
-            puts row.join(' ')
-          elsif row.size > 2
-            puts "#{row[0]}=#{row[1]} # #{row[2..-1].join(' ')}"
-          elsif row.size == 2
-            puts "#{row[0]}=#{row[1]}"
-          elsif row.size == 1
-            puts "# #{row[0]}"
-          else
-            # ignore
+          row_to_env(row) do |key, value, comment|
+            case
+            when key && value && comment
+              puts "#{key}=#{value} #{comment}"
+            when key && value && !comment
+              puts "#{key}=#{value}"
+            when !key && !value && comment
+              puts comment
+            end
           end
         end
+      end
+
+      desc "runner SPREADSHEET_URL_OR_ALIAS COMMANDS", ""
+      def runner(url_or_alias, *commands)
+        ws = worksheet(url_or_alias)
+        ws.rows.each.with_index do |row, idx|
+          row_to_env(row) do |key, value, comment|
+            case
+            when key && value
+              ENV[key] = value
+            end
+          end
+        end
+        system(*commands)
       end
 
       desc "alias NAME SPREADSHEET_URL", ""
@@ -75,6 +88,31 @@ module DriveEnv
             spreadsheet.worksheet_by_gid($1)
           else
             spreadsheet.worksheets[0]
+          end
+        end
+
+        def row_to_env(row)
+          if row[0] =~ /\A\s*#/
+            comment = row.join(' ')
+            yield nil, nil, comment
+          elsif row.size > 2
+            key = row[0]
+            value = row[1]
+            comment = '# ' + row[2..-1].join(' ')
+            if comment =~ /\A#\s*\z/
+              yield key, value, nil
+            else
+              yield key, value, comment
+            end
+          elsif row.size == 2
+            key = row[0]
+            value = row[1]
+            yield key, value, nil
+          elsif row.size == 1
+            comment = "# #{row[0]}"
+            yield nil, nil, comment
+          else
+            # ignore
           end
         end
       end
