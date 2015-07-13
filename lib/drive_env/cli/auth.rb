@@ -12,7 +12,6 @@ module DriveEnv
         if !config.client_secret
           abort "please set client_secret: #{$0} config set client_secret YOUR_CLIENT_SECRET"
         end
-        auth = DriveEnv.auth
         print("1. Open this page:\n%s\n\n" % auth.authorization_uri)
         print("2. Enter the authorization code shown in the page: ")
         auth.code = $stdin.gets.chomp
@@ -25,7 +24,21 @@ module DriveEnv
 
       no_commands do
         def config
-          @config ||= DriveEnv.config(options[:config])
+          @config ||= DriveEnv::Config.load(options[:config])
+        end
+
+        def auth
+          unless @auth
+            @auth = ::DriveEnv.client.authorization
+            @auth.client_id = config.client_id
+            @auth.client_secret = config.client_secret
+            @auth.scope = %w[
+              https://www.googleapis.com/auth/drive
+              https://spreadsheets.google.com/feeds/
+            ].join(' ')
+            @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+          end
+          @auth
         end
       end
     end

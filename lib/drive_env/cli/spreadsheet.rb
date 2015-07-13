@@ -68,8 +68,35 @@ module DriveEnv
           @config ||= DriveEnv::Config.load(options[:config])
         end
 
+        def auth
+          unless @auth
+            @auth = ::DriveEnv.client.authorization
+            @auth.client_id = config.client_id
+            @auth.client_secret = config.client_secret
+          end
+          @auth
+        end
+
+        def access_token
+          unless @access_token
+            auth.expires_at = config.expires_at
+            if auth.expired?
+              auth.refresh_token = config.refresh_token
+              auth.fetch_access_token!
+              config.access_token = auth.access_token
+              config.expires_at = auth.issued_at + auth.expires_in
+              config.save
+            end
+            @access_token = config.access_token
+          end
+          @access_token
+        end
+
         def session
-          @session ||= GoogleDrive.login_with_oauth(DriveEnv.access_token(options[:config]))
+          if !config.access_token
+            abort "please set access_token: #{$0} auth login"
+          end
+          @session ||= GoogleDrive.login_with_oauth(access_token)
         end
 
         def worksheet(url_or_alias)
