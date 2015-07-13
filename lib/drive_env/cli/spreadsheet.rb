@@ -60,7 +60,7 @@ module DriveEnv
 
         def session
           unless @session
-            @session = GoogleDrive.login_with_oauth(config.access_token)
+            @session = GoogleDrive.login_with_oauth(DriveEnv.access_token)
           end
           @session
         end
