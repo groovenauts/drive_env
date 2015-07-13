@@ -1,5 +1,5 @@
 require "drive_env/version"
 
 module DriveEnv
-  # Your code goes here...
+  autoload :Cli, 'drive_env/cli'
 end
