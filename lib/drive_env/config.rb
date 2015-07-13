@@ -7,7 +7,9 @@ module DriveEnv
 
     attr_accessor :client_id
     attr_accessor :client_secret
+    attr_accessor :access_token
     attr_accessor :refresh_token
+    attr_accessor :expires_at
 
     def set_alias_for_spreadsheet(name, url)
       unless @spreadsheet_aliases

@@ -69,10 +69,7 @@ module DriveEnv
         end
 
         def session
-          unless @session
-            @session = GoogleDrive.login_with_oauth(DriveEnv.access_token(config))
-          end
-          @session
+          @session ||= GoogleDrive.login_with_oauth(DriveEnv.access_token(options[:config]))
         end
 
         def worksheet(url_or_alias)

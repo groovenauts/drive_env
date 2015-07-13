@@ -52,7 +52,7 @@ $ drive_env config set client_secret YOUR_CLIENT_SECRET
 $ drive_env auth login
 ```
 
-Now you have refresh_token, you can access to Google APIs.
+Now you have access token and refresh token, you can access to Google APIs.
 
 Show Spreadsheet in Google Drive:
 

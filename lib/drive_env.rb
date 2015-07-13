@@ -18,7 +18,10 @@ module DriveEnv
     end
 
     def client
-      @client ||= Google::APIClient.new(:application_name => 'drive_env', :application_version => DriveEnv::VERSION)
+      @client ||= Google::APIClient.new(
+        :application_name => 'drive_env',
+        :application_version => DriveEnv::VERSION,
+      )
     end
 
     def auth
@@ -35,12 +38,17 @@ module DriveEnv
       @auth
     end
 
-    def access_token(config=::DriveEnv.config)
+    def access_token(file=::DriveEnv::Config::DEFAULT_CONFIG_FILE)
       unless @access_token
-        auth = DriveEnv.auth
-        auth.refresh_token = config.refresh_token
-        auth.fetch_access_token!
-        @access_token = auth.access_token
+        self.auth.expires_at = (self.config.expires_at || Time.now - 3600)
+        if self.auth.expired?
+          self.auth.refresh_token = self.config.refresh_token
+          self.auth.fetch_access_token!
+          self.config.access_token = self.auth.access_token
+          self.config.expires_at = self.auth.issued_at + self.auth.expires_in
+          self.config.save(file) if file
+        end
+        @access_token = self.config.access_token
       end
       @access_token
     end

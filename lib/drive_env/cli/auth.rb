@@ -17,7 +17,9 @@ module DriveEnv
         print("2. Enter the authorization code shown in the page: ")
         auth.code = $stdin.gets.chomp
         auth.fetch_access_token!
+        config.access_token = auth.access_token
         config.refresh_token = auth.refresh_token
+        config.expires_at = auth.issued_at + auth.expires_in
         config.save(options[:config])
       end
 
