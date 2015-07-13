@@ -5,6 +5,7 @@ module DriveEnv
   class Config
     DEFAULT_CONFIG_FILE = File.expand_path('~/.config/drive_env/config')
 
+    attr_accessor :file
     attr_accessor :client_id
     attr_accessor :client_secret
     attr_accessor :access_token
@@ -32,13 +33,14 @@ module DriveEnv
       @spreadsheet_aliases[name]
     end
 
-    def save(file=DEFAULT_CONFIG_FILE)
-      dir = File.dirname(file)
+    def save
+      @file ||= DEFAULT_CONFIG_FILE
+      dir = File.dirname(@file)
       if !File.directory?(dir)
         FileUtils.mkdir_p(dir)
       end
 
-      File.open(file, 'w') do |fh|
+      File.open(@file, 'w') do |fh|
         fh << YAML.dump(self)
       end
     end
@@ -46,10 +48,12 @@ module DriveEnv
     class << self
       def load(file=DEFAULT_CONFIG_FILE)
         if File.exist?(file)
-          YAML.load(File.read(file))
+          obj = YAML.load(File.read(file))
         else
-          self.new
+          obj = self.new
         end
+        obj.file = file
+        obj
       end
     end
   end

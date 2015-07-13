@@ -54,13 +54,13 @@ module DriveEnv
       desc "alias NAME SPREADSHEET_URL", ""
       def alias(name, url)
         config.set_alias_for_spreadsheet(name, url)
-        config.save(options[:config])
+        config.save
       end
 
       desc "unalias NAME", ""
       def unalias(name)
         config.unset_alias_for_spreadsheet(name)
-        config.save(options[:config])
+        config.save
       end
 
       no_commands do

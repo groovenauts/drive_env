@@ -9,26 +9,15 @@ module DriveEnv
       @config ||= DriveEnv::Config.load(file)
     end
 
-    def client_id
-      @client_id ||= self.config.client_id
-    end
-
-    def client_secret
-      @client_secret ||= self.config.client_secret
-    end
-
     def client
-      @client ||= Google::APIClient.new(
-        :application_name => 'drive_env',
-        :application_version => DriveEnv::VERSION,
-      )
+      @client ||= Google::APIClient.new(:application_name => 'drive_env', :application_version => DriveEnv::VERSION)
     end
 
     def auth
       unless @auth
         @auth = ::DriveEnv.client.authorization
-        @auth.client_id = ::DriveEnv.client_id
-        @auth.client_secret = ::DriveEnv.client_secret
+        @auth.client_id = ::DriveEnv.config.client_id
+        @auth.client_secret = ::DriveEnv.config.client_secret
         @auth.scope = %w[
           https://www.googleapis.com/auth/drive
           https://spreadsheets.google.com/feeds/
@@ -40,7 +29,7 @@ module DriveEnv
 
     def access_token(file=::DriveEnv::Config::DEFAULT_CONFIG_FILE)
       unless @access_token
-        self.auth.expires_at = (self.config.expires_at || Time.now - 3600)
+        self.auth.expires_at = self.config.expires_at
         if self.auth.expired?
           self.auth.refresh_token = self.config.refresh_token
           self.auth.fetch_access_token!

@@ -6,13 +6,13 @@ module DriveEnv
       desc "set key value", ""
       def set(key, value)
         config.instance_variable_set("@#{key}", value)
-        config.save(options[:config])
+        config.save
       end
 
       desc "unset key", ""
       def unset(key)
         config.remove_instance_variable("@#{key}")
-        config.save(options[:config])
+        config.save
       end
 
       desc "list", ""
