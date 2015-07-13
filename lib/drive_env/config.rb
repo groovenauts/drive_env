@@ -5,9 +5,9 @@ module DriveEnv
   class Config
     DEFAULT_CONFIG_FILE = File.expand_path('~/.config/drive_env/config')
 
-    attr :client_id
-    attr :client_secret
-    attr :access_token
+    attr_accessor :client_id
+    attr_accessor :client_secret
+    attr_accessor :access_token
 
     include Enumerable
 
