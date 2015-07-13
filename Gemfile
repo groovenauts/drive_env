@@ -5,4 +5,4 @@ gemspec
 gem 'pry'
 gem 'thor'
 gem 'google_drive'
-
+gem 'text-table'
