@@ -95,24 +95,28 @@ module DriveEnv
           if row[0] =~ /\A\s*#/
             comment = row.join(' ')
             yield nil, nil, comment
-          elsif row.size > 2
-            key = row[0]
-            value = row[1]
-            comment = '# ' + row[2..-1].join(' ')
-            if comment =~ /\A#\s*\z/
-              yield key, value, nil
-            else
-              yield key, value, comment
-            end
-          elsif row.size == 2
-            key = row[0]
-            value = row[1]
-            yield key, value, nil
-          elsif row.size == 1
-            comment = "# #{row[0]}"
-            yield nil, nil, comment
           else
-            # ignore
+            key = row[0]
+            value = row[1]
+            others = row[2..-1].join(' ')
+            case [key, value, others].map{|v| !v.strip.empty?}
+            when [true, true, true]
+              yield key, value, "# #{others}"
+            when [true, true, false]
+              yield key, value, nil
+            when [true, false, true]
+              yield key, '', "# #{others}"
+            when [true, false, false]
+              yield nil, nil, "# #{key}="
+            when [false, true, true]
+              # ignore
+            when [false, true, false]
+              # ignore
+            when [false, false, true]
+              yield nil, nil, "# #{others}"
+            when [false, false, false]
+              # ignore
+            end
           end
         end
       end
