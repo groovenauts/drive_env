@@ -54,26 +54,23 @@ module DriveEnv
       desc "alias NAME SPREADSHEET_URL", ""
       def alias(name, url)
         config.set_alias_for_spreadsheet(name, url)
-        config.save
+        config.save(options[:config])
       end
 
       desc "unalias NAME", ""
       def unalias(name)
         config.unset_alias_for_spreadsheet(name)
-        config.save
+        config.save(options[:config])
       end
 
       no_commands do
         def config
-          unless @config
-            @config = DriveEnv::Config.load
-          end
-          @config
+          @config ||= DriveEnv::Config.load(options[:config])
         end
 
         def session
           unless @session
-            @session = GoogleDrive.login_with_oauth(DriveEnv.access_token)
+            @session = GoogleDrive.login_with_oauth(DriveEnv.access_token(config))
           end
           @session
         end

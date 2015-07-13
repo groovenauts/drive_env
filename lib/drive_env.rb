@@ -5,8 +5,8 @@ module DriveEnv
   autoload :Config, 'drive_env/config'
 
   class << self
-    def config
-      @config ||= DriveEnv::Config.load
+    def config(file=::DriveEnv::Config::DEFAULT_CONFIG_FILE)
+      @config ||= DriveEnv::Config.load(file)
     end
 
     def client_id

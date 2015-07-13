@@ -3,6 +3,8 @@ require 'thor'
 module DriveEnv
   module Cli
     class Command < Thor
+      class_option :config, :aliases =>['c'], :required => false, :type => :string, :default => DriveEnv::Config::DEFAULT_CONFIG_FILE
+
       desc "auth SUBCOMMAND ...ARGS", ""
       subcommand "auth", ::DriveEnv::Cli::Auth
 

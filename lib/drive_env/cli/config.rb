@@ -5,22 +5,25 @@ module DriveEnv
     class Config < Thor
       desc "set key value", ""
       def set(key, value)
-        config = DriveEnv::Config.load
         config.instance_variable_set("@#{key}", value)
-        config.save
+        config.save(options[:config])
       end
 
       desc "unset key", ""
       def unset(key)
-        config = DriveEnv::Config.load
         config.remove_instance_variable("@#{key}")
-        config.save
+        config.save(options[:config])
       end
 
       desc "list", ""
       def list
-        config = DriveEnv::Config.load
         puts YAML.dump(config)
+      end
+
+      no_commands do
+        def config
+          @config ||= DriveEnv::Config.load(options[:config])
+        end
       end
     end
   end
