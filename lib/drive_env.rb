@@ -1,8 +1,9 @@
 require 'drive_env/version'
+require 'google/api_client'
 
 module DriveEnv
-  autoload :Cli, 'drive_env/cli'
-  autoload :Config, 'drive_env/config'
+  autoload :Cli,     'drive_env/cli'
+  autoload :Config,  'drive_env/config'
 
   class << self
     def client

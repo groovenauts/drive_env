@@ -1,5 +1,5 @@
 require 'thor'
-require 'google_drive'
+require 'drive_env'
 
 module DriveEnv
   module Cli

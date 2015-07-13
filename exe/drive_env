@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-require 'drive_env'
+require 'drive_env/cli/command'
 
 DriveEnv::Cli::Command.start
 

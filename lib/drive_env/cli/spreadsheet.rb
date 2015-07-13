@@ -1,6 +1,7 @@
 require 'thor'
 require 'text-table'
 require 'google_drive'
+require 'drive_env'
 
 module DriveEnv
   module Cli

@@ -1,4 +1,6 @@
 require 'thor'
+require 'drive_env/cli'
+require 'drive_env/config'
 
 module DriveEnv
   module Cli
