@@ -103,7 +103,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/drive_env.
+Bug reports and pull requests are welcome on GitHub at https://github.com/groovenauts/drive_env.
 
 
 ## License
