@@ -4,7 +4,7 @@ require 'drive_env'
 module DriveEnv
   module Cli
     class Auth < Thor
-      desc "login", ""
+      desc 'login', ''
       def login
         if !config.client_id
           abort "please set client_id: #{$0} config set client_id YOUR_CLIENT_ID"
@@ -36,7 +36,7 @@ module DriveEnv
               https://www.googleapis.com/auth/drive
               https://spreadsheets.google.com/feeds/
             ].join(' ')
-            @auth.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+            @auth.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
           end
           @auth
         end

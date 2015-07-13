@@ -5,55 +5,43 @@ module DriveEnv
   class Config
     DEFAULT_CONFIG_FILE = File.expand_path('~/.config/drive_env/config')
 
-    attr_accessor :file
     attr_accessor :client_id
     attr_accessor :client_secret
     attr_accessor :access_token
     attr_accessor :refresh_token
     attr_accessor :expires_at
 
+    def initialize
+      @spreadsheet_aliases = {}
+      @config_file = DEFAULT_CONFIG_FILE
+    end
+
     def set_alias_for_spreadsheet(name, url)
-      unless @spreadsheet_aliases
-        @spreadsheet_aliases = {}
-      end
       @spreadsheet_aliases[name] = url
     end
 
     def unset_alias_for_spreadsheet(name)
-      unless @spreadsheet_aliases
-        @spreadsheet_aliases = {}
-      end
       @spreadsheet_aliases.delete(name)
     end
 
     def lookup_spreadsheet_url_by_alias(name)
-      unless @spreadsheet_aliases
-        @spreadsheet_aliases = {}
-      end
       @spreadsheet_aliases[name]
     end
 
     def save
-      @file ||= DEFAULT_CONFIG_FILE
-      dir = File.dirname(@file)
+      dir = File.dirname(@config_file)
       if !File.directory?(dir)
         FileUtils.mkdir_p(dir)
       end
 
-      File.open(@file, 'w') do |fh|
+      File.open(@config_file, 'w') do |fh|
         fh << YAML.dump(self)
       end
     end
 
     class << self
-      def load(file=DEFAULT_CONFIG_FILE)
-        if File.exist?(file)
-          obj = YAML.load(File.read(file))
-        else
-          obj = self.new
-        end
-        obj.file = file
-        obj
+      def load(file)
+        File.exist?(file) ? YAML.load(File.read(file)) : self.new
       end
     end
   end

@@ -6,7 +6,7 @@ require 'drive_env'
 module DriveEnv
   module Cli
     class Spreadsheet < Thor
-      desc "show SPREADSHEET_URL_OR_ALIAS", ""
+      desc 'show SPREADSHEET_URL_OR_ALIAS', ''
       def show(url_or_alias)
         ws = worksheet(url_or_alias)
         table = Text::Table.new
@@ -21,7 +21,7 @@ module DriveEnv
         puts table.to_s
       end
 
-      desc "to_env SPREADSHEET_URL_OR_ALIAS", ""
+      desc 'to_env SPREADSHEET_URL_OR_ALIAS', ''
       def to_env(url_or_alias)
         ws = worksheet(url_or_alias)
         ws.rows.each.with_index do |row, idx|
@@ -38,7 +38,7 @@ module DriveEnv
         end
       end
 
-      desc "runner SPREADSHEET_URL_OR_ALIAS COMMANDS", ""
+      desc 'runner SPREADSHEET_URL_OR_ALIAS COMMANDS', ''
       def runner(url_or_alias, *commands)
         ws = worksheet(url_or_alias)
         ws.rows.each.with_index do |row, idx|
@@ -52,13 +52,13 @@ module DriveEnv
         system(*commands)
       end
 
-      desc "alias NAME SPREADSHEET_URL", ""
+      desc 'alias NAME SPREADSHEET_URL', ''
       def alias(name, url)
         config.set_alias_for_spreadsheet(name, url)
         config.save
       end
 
-      desc "unalias NAME", ""
+      desc 'unalias NAME', ''
       def unalias(name)
         config.unset_alias_for_spreadsheet(name)
         config.save
@@ -101,10 +101,7 @@ module DriveEnv
         end
 
         def worksheet(url_or_alias)
-          url = config.lookup_spreadsheet_url_by_alias(url_or_alias)
-          unless url
-            url = url_or_alias
-          end
+          url = config.lookup_spreadsheet_url_by_alias(url_or_alias) || url_or_alias
           spreadsheet = session.spreadsheet_by_url(url)
           if url =~ /#gid=(\d+)/
             spreadsheet.worksheet_by_gid($1)

@@ -4,19 +4,19 @@ require 'drive_env'
 module DriveEnv
   module Cli
     class Config < Thor
-      desc "set key value", ""
+      desc 'set key value', ''
       def set(key, value)
         config.instance_variable_set("@#{key}", value)
         config.save
       end
 
-      desc "unset key", ""
+      desc 'unset key', ''
       def unset(key)
         config.remove_instance_variable("@#{key}")
         config.save
       end
 
-      desc "list", ""
+      desc 'list', ''
       def list
         puts YAML.dump(config)
       end
