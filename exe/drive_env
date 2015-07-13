@@ -2,5 +2,5 @@
 
 require 'drive_env'
 
-DriveEnv::Cli.start
+DriveEnv::Cli::Command.start
 
