@@ -1,5 +1,8 @@
 # DriveEnv
 
+[![Gem Version](https://badge.fury.io/rb/drive_env.png)](https://rubygems.org/gems/drive_env)
+[![Build Status](https://travis-ci.org/groovenauts/drive_env.svg?branch=master)](https://travis-ci.org/groovenauts/drive_env)
+
 Generate `.env` file from Spreadsheet in Google Drive.
 
 ```
