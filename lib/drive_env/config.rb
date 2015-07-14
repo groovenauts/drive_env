@@ -41,7 +41,9 @@ module DriveEnv
 
     class << self
       def load(file)
-        File.exist?(file) ? YAML.load(File.read(file)) : self.new
+        obj = File.exist?(file) ? YAML.load(File.read(file)) : self.new
+        obj.instance_variable_set("@config_file", file)
+        obj
       end
     end
   end
