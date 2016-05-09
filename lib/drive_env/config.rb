@@ -38,10 +38,20 @@ module DriveEnv
       end
     end
 
+    def migrate
+      ## dropped variables in 0.2.pre1
+      %W[access_token refresh_token expires_at].each do |v|
+        if instance_variable_get("@#{v}")
+          remove_instance_variable("@#{v}")
+        end
+      end
+    end
+
     class << self
       def load(file)
         obj = File.exist?(file) ? YAML.load(File.read(file)) : self.new
         obj.instance_variable_set("@config_file", file)
+        obj.migrate
         obj
       end
     end
