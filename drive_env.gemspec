@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "google_drive", "~> 2.0.0.pre1"
   spec.add_dependency "google-api-client", "~> 0.9.6"
+  spec.add_dependency "googleauth", "~> 0.5.1"
   spec.add_dependency "thor", "~> 0.19.1"
   spec.add_dependency "text-table", "~> 1.2.4"
 
