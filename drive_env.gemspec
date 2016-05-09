@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google_drive", "~> 1.0.1"
-  spec.add_dependency "google-api-client", "~> 0.8.6"
+  spec.add_dependency "google_drive", "~> 2.0.0.pre1"
+  spec.add_dependency "google-api-client", "~> 0.9.6"
   spec.add_dependency "thor", "~> 0.19.1"
   spec.add_dependency "text-table", "~> 1.2.4"
 
