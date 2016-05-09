@@ -4,6 +4,8 @@ require 'drive_env'
 module DriveEnv
   module Cli
     class Auth < Thor
+      OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
       desc 'login', ''
       def login
         if !config.client_id
@@ -12,14 +14,11 @@ module DriveEnv
         if !config.client_secret
           abort "please set client_secret: #{$0} config set client_secret YOUR_CLIENT_SECRET"
         end
-        print("1. Open this page:\n%s\n\n" % auth.authorization_uri)
+        print("1. Open this page:\n%s\n\n" % authorizer.get_authorization_url(base_url: OOB_URI))
         print("2. Enter the authorization code shown in the page: ")
-        auth.code = $stdin.gets.chomp
-        auth.fetch_access_token!
-        config.access_token = auth.access_token
-        config.refresh_token = auth.refresh_token
-        config.expires_at = auth.issued_at + auth.expires_in
-        config.save
+
+        code = $stdin.gets.chomp
+        authorizer.get_and_store_credentials_from_code(user_id: DriveEnv::Config::DEFAULT_TOKEN_USER_ID, code: code, base_url: OOB_URI)
       end
 
       no_commands do
@@ -27,18 +26,8 @@ module DriveEnv
           @config ||= DriveEnv::Config.load(options[:config])
         end
 
-        def auth
-          unless @auth
-            @auth = ::DriveEnv.client.authorization
-            @auth.client_id = config.client_id
-            @auth.client_secret = config.client_secret
-            @auth.scope = %w[
-              https://www.googleapis.com/auth/drive
-              https://spreadsheets.google.com/feeds/
-            ].join(' ')
-            @auth.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
-          end
-          @auth
+        def authorizer
+          DriveEnv.authorizer(config.client_id, config.client_secret, DriveEnv::Config::DEFAULT_TOKENS_STORE_FILE)
         end
       end
     end

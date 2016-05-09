@@ -69,34 +69,27 @@ module DriveEnv
           @config ||= DriveEnv::Config.load(options[:config])
         end
 
-        def auth
-          unless @auth
-            @auth = ::DriveEnv.client.authorization
-            @auth.client_id = config.client_id
-            @auth.client_secret = config.client_secret
-          end
-          @auth
+        def authorizer
+          DriveEnv.authorizer(config.client_id, config.client_secret, DriveEnv::Config::DEFAULT_TOKENS_STORE_FILE)
         end
 
         def access_token
           unless @access_token
-            auth.expires_at = config.expires_at
-            if auth.expired?
-              auth.refresh_token = config.refresh_token
-              auth.fetch_access_token!
-              config.access_token = auth.access_token
-              config.expires_at = auth.issued_at + auth.expires_in
-              config.save
+            credential = authorizer.get_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID)
+            case
+            when credential.nil?
+              abort "please set access_token: #{$0} auth login"
+            when credential.expired?
+              credential.fetch_access_token!
+              credential.expires_at = credential.issued_at + credential.expires_in
+              authorizer.store_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID, credential)
             end
-            @access_token = config.access_token
+            @access_token = credential.access_token
           end
           @access_token
         end
 
         def session
-          if !config.access_token
-            abort "please set access_token: #{$0} auth login"
-          end
           @session ||= GoogleDrive.login_with_oauth(access_token)
         end
 

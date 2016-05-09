@@ -4,12 +4,11 @@ require 'yaml'
 module DriveEnv
   class Config
     DEFAULT_CONFIG_FILE = File.expand_path('~/.config/drive_env/config')
+    DEFAULT_TOKENS_STORE_FILE = File.expand_path('~/.config/drive_env/tokens.yml')
+    DEFAULT_TOKEN_USER_ID = 'default'
 
     attr_accessor :client_id
     attr_accessor :client_secret
-    attr_accessor :access_token
-    attr_accessor :refresh_token
-    attr_accessor :expires_at
 
     def initialize
       @spreadsheet_aliases = {}
