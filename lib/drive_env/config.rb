@@ -4,12 +4,11 @@ require 'yaml'
 module DriveEnv
   class Config
     DEFAULT_CONFIG_FILE = File.expand_path('~/.config/drive_env/config')
+    DEFAULT_TOKENS_STORE_FILE = File.expand_path('~/.config/drive_env/tokens.yml')
+    DEFAULT_TOKEN_USER_ID = 'default'
 
     attr_accessor :client_id
     attr_accessor :client_secret
-    attr_accessor :access_token
-    attr_accessor :refresh_token
-    attr_accessor :expires_at
 
     def initialize
       @spreadsheet_aliases = {}
@@ -39,10 +38,20 @@ module DriveEnv
       end
     end
 
+    def migrate
+      ## dropped variables in 0.2.pre1
+      %W[access_token refresh_token expires_at].each do |v|
+        if instance_variable_get("@#{v}")
+          remove_instance_variable("@#{v}")
+        end
+      end
+    end
+
     class << self
       def load(file)
         obj = File.exist?(file) ? YAML.load(File.read(file)) : self.new
         obj.instance_variable_set("@config_file", file)
+        obj.migrate
         obj
       end
     end
