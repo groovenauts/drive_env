@@ -23,7 +23,7 @@ SMTP_PASSWORD=appuser
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'drive_env', '~> 0.2.pre1'
+gem 'drive_env'
 ```
 
 And then execute:
@@ -32,7 +32,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install drive_env --pre
+    $ gem install drive_env
 
 ## Usage
 
