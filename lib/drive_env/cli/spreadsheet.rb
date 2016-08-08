@@ -73,24 +73,23 @@ module DriveEnv
           DriveEnv.authorizer(config.client_id, config.client_secret, DriveEnv::Config::DEFAULT_TOKENS_STORE_FILE)
         end
 
-        def access_token
-          unless @access_token
-            credential = authorizer.get_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID)
+        def credential
+          unless @credential
+            @credential = authorizer.get_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID)
             case
-            when credential.nil?
+            when @credential.nil?
               abort "please set access_token: #{$0} auth login"
-            when credential.expired?
-              credential.fetch_access_token!
-              credential.expires_at = credential.issued_at + credential.expires_in
-              authorizer.store_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID, credential)
+            when @credential.expired?
+              @credential.fetch_access_token!
+              @credential.expires_at = credential.issued_at + credential.expires_in
+              authorizer.store_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID, @credential)
             end
-            @access_token = credential.access_token
           end
-          @access_token
+          @credential
         end
 
         def session
-          @session ||= GoogleDrive.login_with_oauth(access_token)
+          @session ||= GoogleDrive.login_with_oauth(credential)
         end
 
         def worksheet(url_or_alias)
