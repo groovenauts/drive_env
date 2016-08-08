@@ -90,9 +90,6 @@ module DriveEnv
 
         def session
           @session ||= GoogleDrive.login_with_oauth(credential)
-          require 'pry'
-          binding.pry
-          @session
         end
 
         def worksheet(url_or_alias)
