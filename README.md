@@ -98,6 +98,48 @@ $ drive_env spreadsheet to_env sheet1 > .env
 $ your-ruby-application-with-dotenv-gem
 ```
 
+## Integrate with Rails, Capistrano, and Dotenv
+
+### Setup
+
+Add `drive_env`, `dotenv` gem to Gemfile:
+
+```ruby
+gem "dotenv-rails", require: "dotenv/rails-now"
+
+gem "drive_env", group: :development
+```
+
+Add `require "drive_env/capistrano"` to Capfile:
+
+```ruby
+require "drive_env/capistrano"
+```
+
+Add `.env` file to `:linked_files` in config/deploy.rb:
+
+```ruby
+append, :linked_files, ".env"
+```
+
+And set spreadsheet url in config/deploy/STAGE.rb:
+
+```ruby
+set :drive_env_spreadsheet_url, 'https://docs.google.com/spreadsheets/d/*********/edit#gid=0'
+```
+
+### Deployment with drive_env
+
+1. Generate `config/deploy/#{STAGE}.env` file from spreadsheet
+2. Upload `config/deploy/#{STAGE}.env` to `#{shared_path}/.env`
+3. Deploy
+
+```shell
+bundle exec cap STAGE drive_env:to_env
+bundle exec cap STAGE drive_env:upload
+bundle exec cap STAGE deploy
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
