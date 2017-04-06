@@ -89,7 +89,7 @@ module DriveEnv
         end
 
         def session
-          @session ||= GoogleDrive.login_with_oauth(credential)
+          @session ||= GoogleDrive::Session.login_with_oauth(credential)
         end
 
         def worksheet(url_or_alias)
