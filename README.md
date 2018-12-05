@@ -38,14 +38,13 @@ Or install it yourself as:
 
 First, you need to login Google Cloud Platform and enable APIs.
 
-1. Open https://console.developers.google.com/project
+1. Open [API library page](https://console.developers.google.com/apis/library)
 2. Create/Select project
-3. Visit APIs & auth -> APIs
-4. Grant access to `Drive API`
-5. Visit APIs & auth -> Credentials
-6. Oauth -> Create new Client ID
-7. Choose Installed application (Other)
-8. Note CLIENT ID, CLIENT_SECRET
+3. Enable "Google Drive API" and "Google Sheets API"
+4. Open [Credentials page](https://console.developers.google.com/apis/credentials) in the same project
+5. Click "Create credentials" and choose "OAuth client ID"
+6. Choose "Other" for "Application type", and click "create"
+7. Note CLIENT ID, CLIENT_SECRET
 
 Setup client_id, client_secret, and login.
 
