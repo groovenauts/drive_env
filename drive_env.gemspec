@@ -32,8 +32,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor", "~> 0.19"
   spec.add_dependency "text-table", "~> 1.2"
 
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "pry"
 end
