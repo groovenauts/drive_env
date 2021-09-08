@@ -49,7 +49,7 @@ module DriveEnv
           end
         when 'json'
           puts JSON.pretty_generate(
-            Hash[envs.select{|env| env[:key] }.map{|env| [env[:key], env[:value]]}]
+            envs.select{|env| env[:key] }.map{|env| { key: env[:key], value: env[:value] } }
           )
         end
       end

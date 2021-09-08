@@ -122,15 +122,36 @@ JSON output is available by `--format=json` option.
 
 ```
 $ drive_env spreadsheet to_env sheet1 --format=json
-{
-  "RAILS_ENV": "production",
-  "DATABASE_HOSTNAME": "x.x.x.x",
-  "DATABASE_USERNAME": "appuser",
-  "DATABASE_PASSWORD": "appuser",
-  "SMTP_HOST": "x.x.x.x",
-  "SMTP_USERNAME": "appuser",
-  "SMTP_PASSWORD": "appuser"
-}
+[
+  {
+    "key": "RAILS_ENV",
+    "value": "production"
+  },
+  {
+    "key": "DATABASE_HOSTNAME",
+    "value": "x.x.x.x"
+  },
+  {
+    "key": "DATABASE_USERNAME",
+    "value": "appuser"
+  },
+  {
+    "key": "DATABASE_PASSWORD",
+    "value": "appuser"
+  },
+  {
+    "key": "SMTP_HOST",
+    "value": "x.x.x.x"
+  },
+  {
+    "key": "SMTP_USERNAME",
+    "value": "appuser"
+  },
+  {
+    "key": "SMTP_PASSWORD",
+    "value": "appuser"
+  }
+]
 ```
 
 ## Development
