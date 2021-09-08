@@ -75,14 +75,20 @@ module DriveEnv
 
         def credential
           unless @credential
-            @credential = authorizer.get_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID)
-            case
-            when @credential.nil?
-              abort "please set access_token: #{$0} auth login"
-            when @credential.expired?
+            case authorizer
+            when Google::Auth::UserAuthorizer
+              @credential = authorizer.get_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID)
+              case
+              when @credential.nil?
+                abort "please set access_token: #{$0} auth login"
+              when @credential.expired?
+                @credential.fetch_access_token!
+                @credential.expires_at = credential.issued_at + credential.expires_in
+                authorizer.store_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID, @credential)
+              end
+            when Google::Auth::ServiceAccountCredentials
+              @credential = authorizer
               @credential.fetch_access_token!
-              @credential.expires_at = credential.issued_at + credential.expires_in
-              authorizer.store_credentials(DriveEnv::Config::DEFAULT_TOKEN_USER_ID, @credential)
             end
           end
           @credential
@@ -134,4 +140,3 @@ module DriveEnv
     end
   end
 end
-
