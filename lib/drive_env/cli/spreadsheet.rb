@@ -24,7 +24,7 @@ module DriveEnv
 
       desc 'to_env SPREADSHEET_URL_OR_ALIAS', ''
       option :format, type: 'string', default: 'dotenv', enum: %w[dotenv json],
-             desc: 'output format (default: dotenv)'
+             desc: 'output format'
       def to_env(url_or_alias)
         ws = worksheet(url_or_alias)
 
