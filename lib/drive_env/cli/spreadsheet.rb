@@ -2,6 +2,7 @@ require 'thor'
 require 'text-table'
 require 'google_drive'
 require 'drive_env'
+require 'json'
 
 module DriveEnv
   module Cli
@@ -22,19 +23,34 @@ module DriveEnv
       end
 
       desc 'to_env SPREADSHEET_URL_OR_ALIAS', ''
+      option :format, type: 'string', default: 'dotenv', enum: %w[dotenv json],
+             desc: 'output format'
       def to_env(url_or_alias)
         ws = worksheet(url_or_alias)
+
+        envs = []
         ws.rows.each.with_index do |row, idx|
           row_to_env(row) do |key, value, comment|
+            envs << { key: key, value: value, comment: comment }
+          end
+        end
+
+        case options[:format]
+        when 'dotenv'
+          envs.each do |env|
             case
-            when key && value && comment
-              puts "#{key}=#{value} #{comment}"
-            when key && value && !comment
-              puts "#{key}=#{value}"
-            when !key && !value && comment
-              puts comment
+            when env[:key] && env[:value] && env[:comment]
+              puts "#{env[:key]}=#{env[:value]} #{env[:comment]}"
+            when env[:key] && env[:value] && !env[:comment]
+              puts "#{env[:key]}=#{env[:value]}"
+            when !env[:key] && !env[:value] && env[:comment]
+              puts "#{env[:comment]}"
             end
           end
+        when 'json'
+          puts JSON.pretty_generate(
+            envs.select{|env| env[:key] }.map{|env| { key: env[:key], value: env[:value] } }
+          )
         end
       end
 

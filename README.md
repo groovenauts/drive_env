@@ -116,6 +116,44 @@ $ drive_env spreadsheet to_env sheet1 > .env
 $ your-ruby-application-with-dotenv-gem
 ```
 
+#### Output format
+
+JSON output is available by `--format=json` option.
+
+```
+$ drive_env spreadsheet to_env sheet1 --format=json
+[
+  {
+    "key": "RAILS_ENV",
+    "value": "production"
+  },
+  {
+    "key": "DATABASE_HOSTNAME",
+    "value": "x.x.x.x"
+  },
+  {
+    "key": "DATABASE_USERNAME",
+    "value": "appuser"
+  },
+  {
+    "key": "DATABASE_PASSWORD",
+    "value": "appuser"
+  },
+  {
+    "key": "SMTP_HOST",
+    "value": "x.x.x.x"
+  },
+  {
+    "key": "SMTP_USERNAME",
+    "value": "appuser"
+  },
+  {
+    "key": "SMTP_PASSWORD",
+    "value": "appuser"
+  }
+]
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
